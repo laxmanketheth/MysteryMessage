@@ -12,9 +12,10 @@ async function dbConnect(): Promise<void> {
         return
     }
     try {
-        const db = await mongoose.connect(process.env.MONGODB_URI || "")
+        const db = await mongoose.connect("mongodb+srv://laxmanketheth76:laxman123@cluster1.9ixhwqi.mongodb.net/mystry_message")
         //   console.log(db);
-        // console.log(db.connections);
+        // console.log(db.connections[0]);
+        // console.log('on dbconnect file at line 18 before db connection success');
 
         connection.isConnected = db.connections[0].readyState
         console.log("DB Connected successfully");
@@ -27,3 +28,4 @@ async function dbConnect(): Promise<void> {
 }
 
 export default dbConnect;
+

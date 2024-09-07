@@ -4,11 +4,14 @@ import bcrypt from 'bcryptjs';
 import { sendVerificationEmail } from "@/helpers/sendVerificationEmail";
 
 export async function POST(request: Request) {
-
+    // console.log('Entering POST route handler');///////
     await dbConnect()
-
+    // console.log('MongoDB connection established');//////
     try {
+
         const { username, email, password } = await request.json()
+        // console.log(username , password);
+
         const existingUserVerifiedByUsername = await UserModel.
             findOne({
                 username,
@@ -21,10 +24,8 @@ export async function POST(request: Request) {
                 message: "Username is already taken"
             }, { status: 400 })
         }
-
         const existingUserByEmail = await UserModel.findOne({ email })
         const verifyCode = Math.floor(100000 + Math.random() * 900000).toString()
-
         if (existingUserByEmail) {
             if (existingUserByEmail.isVerified) {
                 return Response.json({
@@ -35,16 +36,16 @@ export async function POST(request: Request) {
             else {
                 const hashedPassword = await bcrypt.hash(password, 10)
                 existingUserByEmail.password = hashedPassword,
-                existingUserByEmail.verifyCode = verifyCode,
-                existingUserByEmail.verifyCodeExpiry = new Date(Date.now() + 3600000)
+                    existingUserByEmail.verifyCode = verifyCode,
+                    existingUserByEmail.verifyCodeExpiry = new Date(Date.now() + 3600000)
                 await existingUserByEmail.save()
             }
-            
         } else {
+
             const hashedPassword = await bcrypt.hash(password, 10)
             const expiryDate = new Date()
             expiryDate.setHours(expiryDate.getHours() + 1)
-
+            
             const newUSer = new UserModel({
                 username,
                 email,
@@ -55,8 +56,10 @@ export async function POST(request: Request) {
                 isAcceptingMessage: true,
                 messages: []
             })
-
+            // console.log('before saving user to mongo line 64 in code');
             await newUSer.save()
+            // console.log('user just saved to mongo line 66 in code');
+
         }
 
         // ** send verification email ** //
