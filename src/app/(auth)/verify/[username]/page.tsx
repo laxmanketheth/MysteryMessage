@@ -33,6 +33,7 @@ const VerifyAccount = () => {
                 description: response.data.message
             })
             router.replace('/sign-in')
+            // router.push('sign-in')
 
         } catch (error) {
             console.error("Error in signup of user", error);
