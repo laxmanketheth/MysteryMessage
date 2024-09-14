@@ -28,7 +28,7 @@ import { ApiResponse } from "@/types/ApiResponse"
 
 type MessageCardProps = {
     message: Message;
-    onMessageDelete: (messageId: any) => void
+    onMessageDelete: (messageId: string) => void
 }
 
 const MessageCard = ({ message, onMessageDelete }: MessageCardProps) => {
@@ -39,7 +39,7 @@ const MessageCard = ({ message, onMessageDelete }: MessageCardProps) => {
         toast({
             title: response.data.message
         })
-        onMessageDelete(message._id)
+        onMessageDelete(message._id as string)
     }
 
     return (
