@@ -53,7 +53,8 @@ export async function POST(request: Request) {
                 verifyCode,
                 verifyCodeExpiry: expiryDate,
                 isVerified: false,
-                isAcceptingMessage: true,
+                // isAcceptingMessage: true,
+                isAcceptingMessage: false,
                 messages: []
             })
             // console.log('before saving user to mongo line 64 in code');

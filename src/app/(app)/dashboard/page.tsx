@@ -19,13 +19,17 @@ import { useForm } from "react-hook-form";
 const UserDashboard = () => {
 
   const [messages, setMessages] = useState<Message[]>([]);
+  // const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSwitchLoading, setIsSwitchLoading] = useState(false);
+  const [baseUrl, setBaseUrl] = useState('');
 
-  const { toast } = useToast()
+  const { toast } = useToast();
   const handleDeleteMessage = (messageId: string) => {
     setMessages(messages.filter((message) => message._id !== messageId))
   };
+  // console.log('messages in state',messages);
+
 
   const { data: session } = useSession()
   const form = useForm({
@@ -35,11 +39,13 @@ const UserDashboard = () => {
   const { register, watch, setValue } = form;
   const acceptMessages = watch('acceptMessages');
 
-  const fetchAcceptMessage = async () => {
+  // here i am using useCallback for fetchAcceptMessage and fetchMessages so that when the useEffect runs then these two functions dont run on every render unless their dependencies change.
+
+  const fetchAcceptMessage = useCallback(async () => {
     setIsSwitchLoading(true)
     try {
-      const response = await axios.get<ApiResponse>('/api/accept-messages')
-      setValue(acceptMessages, response.data.isAcceptingMessage)
+      const response = await axios.get<ApiResponse>('/api/accept-messages');
+      setValue(acceptMessages, response.data.isAcceptingMessage);
     } catch (error) {
       const axiosError = error as AxiosError<ApiResponse>;
       toast({
@@ -49,16 +55,27 @@ const UserDashboard = () => {
         variant: 'destructive'
       })
     } finally {
-      setIsSwitchLoading(false)
+      setIsSwitchLoading(false);
     }
-  };
+  }, [setValue, toast]);
 
-  const fetchMessages = async (refresh: boolean = false) => {
+
+  const fetchMessages = useCallback(async (refresh: boolean = false) => {
     setIsLoading(true)
     setIsSwitchLoading(false)
     try {
       const response = await axios.get<ApiResponse>('/api/get-messages')
-      setMessages(response.data.messages || [])
+      // console.log('response of get-msgs',response.data);
+      console.log('response of get-msgs', response.data.message);
+
+      const newMessages: Message[] = Array.isArray(response.data.message)
+        ? response.data.message
+        : []; // Default to an empty array if it's not an array
+
+      setMessages(newMessages);
+
+      // setMessages(response.data.message || [])
+
       if (refresh) {
         toast({
           title: 'Refreshed Messages',
@@ -77,27 +94,34 @@ const UserDashboard = () => {
       setIsLoading(false)
       setIsSwitchLoading(false)
     }
-  };
+  }, [setIsLoading, setMessages, toast]);
 
+  // Fetch initial state from the server
   useEffect(() => {
-    if (!session || !session.user) return
-    fetchMessages()
-    fetchAcceptMessage()
+    if (!session || !session.user) return;
 
-  }, [session, setValue, fetchAcceptMessage, fetchMessages])
+    fetchMessages();
+    fetchAcceptMessage();
+  }, [session, setValue, toast, fetchAcceptMessage, fetchMessages])
 
-  // handle switch change
+
+  //====== handle switch change ========//
   const handleSwitchChange = async () => {
     try {
+      console.log('before sending to backend to accept msg api');
+      // console.log(session?.user);
+
       const response = await axios.post<ApiResponse>('/api/accept-messages',
         {
           acceptMessages: !acceptMessages
         })
+      // setValue(acceptMessages, !acceptMessages)
       setValue(acceptMessages, !acceptMessages)
+      // console.log('response from accept-message api',response.data);
       toast({
         title: response.data.message,
         variant: 'default'
-      })
+      });
     } catch (error) {
       const axiosError = error as AxiosError<ApiResponse>;
       toast({
@@ -109,9 +133,20 @@ const UserDashboard = () => {
     }
   };
 
-  const { username } = session?.user as User
+  // const { username } = session?.user as User //destructuring here is giving error
+  const username = session?.user?.username;
+  // console.log('this is username destrcutred in dashboard file line no 123', username);
+
   // TODO: do more research
-  const baseUrl = `${window.location.protocol}//${window.location.host}`;
+  // console.log(window.location);
+  // const baseUrl = `${window.location.protocol}//${window.location.host}`;
+
+  useEffect(() => {
+    // This will run only on the client
+    const url = `${window.location.protocol}//${window.location.host}`;
+    setBaseUrl(url);
+  }, []);
+
   const profileUrl = `${baseUrl}/u/${username}`;
 
   //makeing the copy functionality to copy the url to clipboard
@@ -177,7 +212,7 @@ const UserDashboard = () => {
         {messages.length > 0 ? (
           messages.map((message, index) => (
             <MessageCard
-              key={message._id as string}
+              key={index}
               message={message}
               onMessageDelete={handleDeleteMessage}
             />

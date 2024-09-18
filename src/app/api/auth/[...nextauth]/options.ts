@@ -74,5 +74,6 @@ export const authOptions: NextAuthOptions = {
     },
     // secret: NEXTAUTH_SECRET
     // secret: "helloThere123"
-    secret: process.env.NEXTAUTH_SECRET,
+    // secret: process.env.NEXTAUTH_SECRET,
+    secret: "b3acc15a1ca1c810a438f53de73ae6dad0c58f203864668d809afca024d728ce"
 }

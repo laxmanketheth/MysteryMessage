@@ -5,7 +5,7 @@ import { UserModel } from "@/model/User";
 import { User } from "next-auth";
 
 export async function POST(request: Request) {
-    await dbConnect()
+    await dbConnect();
 
     const session = await getServerSession(authOptions)
     const user: User = session?.user as User //typescript assertion
@@ -22,6 +22,7 @@ export async function POST(request: Request) {
 
     const userId = user._id;
     const { acceptMessages } = await request.json()
+    // console.log('response is coming to accpet msg api backend in accept-messsage file line 25 and this is req.body', !acceptMessages);
 
     try {
         const updatedUser = await UserModel.findByIdAndUpdate(
@@ -29,15 +30,20 @@ export async function POST(request: Request) {
             { isAcceptingMessage: acceptMessages },
             { new: true } //returns the updated value
         )
+        // console.log('updated user at acceptmsg api', updatedUser);
+
         if (!updatedUser) {
             return Response.json(
                 {
                     success: false,
-                    message: "failed to update user status to accept messages"
+                    message: "'Unable to find user to update message acceptance statu"
                 },
-                { status: 401 }
+                { status: 404 }
             )
-        }
+        };
+        // console.log('Updated user at accept msg API:', updatedUser);
+
+        //======== Successfully updated message acceptance status ========//
         return Response.json(
             {
                 success: true,
@@ -49,23 +55,25 @@ export async function POST(request: Request) {
 
 
     } catch (error) {
-        console.log("failed to update user status to accept messages");
+        console.log("Error updating message acceptance status");
         return Response.json(
             {
                 success: false,
-                message: "failed to update user status to accept messages"
+                message: "Error updating message acceptance status"
             },
             { status: 500 }
-        )
+        );
     }
+};
 
-}
 
 export async function GET(request: Request) {
     await dbConnect()
+    // console.log('checking issue at accept-message file at line 67');
 
     const session = await getServerSession(authOptions)
     const user: User = session?.user as User //typescript assertion
+    // console.log("user in accept-msg line 71", user);
 
     if (!session || !session.user) {
         return Response.json(
@@ -107,5 +115,4 @@ export async function GET(request: Request) {
             { status: 500 }
         )
     }
-
-}
+};

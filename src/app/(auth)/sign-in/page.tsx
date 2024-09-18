@@ -40,7 +40,7 @@ const page = () => {
       identifier: data.identifier,
       password: data.password,
     })
-    console.log('login result', result);
+    // console.log('login result line 43 in sign-in file', result);
 
     ///////////////////////
     setisSubmitting(true)
@@ -52,6 +52,8 @@ const page = () => {
         variant: 'destructive'
       })
     }
+    setisSubmitting(false)
+
     if (result?.url) {
       router.replace('/dashboard')
     }
