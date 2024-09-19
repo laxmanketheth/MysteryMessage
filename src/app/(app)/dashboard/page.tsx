@@ -15,20 +15,20 @@ import { User } from "next-auth";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useState } from "react"
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation"
+
 
 const UserDashboard = () => {
 
   const [messages, setMessages] = useState<Message[]>([]);
-  // const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSwitchLoading, setIsSwitchLoading] = useState(false);
   const [baseUrl, setBaseUrl] = useState('');
-
+  const router = useRouter();
   const { toast } = useToast();
   const handleDeleteMessage = (messageId: string) => {
     setMessages(messages.filter((message) => message._id !== messageId))
   };
-  // console.log('messages in state',messages);
 
 
   const { data: session } = useSession()
@@ -40,12 +40,11 @@ const UserDashboard = () => {
   const acceptMessages = watch('acceptMessages');
 
   // here i am using useCallback for fetchAcceptMessage and fetchMessages so that when the useEffect runs then these two functions dont run on every render unless their dependencies change.
-
   const fetchAcceptMessage = useCallback(async () => {
-    setIsSwitchLoading(true)
+    setIsSwitchLoading(true);
     try {
       const response = await axios.get<ApiResponse>('/api/accept-messages');
-      setValue(acceptMessages, response.data.isAcceptingMessage);
+      setValue('acceptMessages', response.data.isAcceptingMessage);
     } catch (error) {
       const axiosError = error as AxiosError<ApiResponse>;
       toast({
@@ -66,7 +65,7 @@ const UserDashboard = () => {
     try {
       const response = await axios.get<ApiResponse>('/api/get-messages')
       // console.log('response of get-msgs',response.data);
-      console.log('response of get-msgs', response.data.message);
+      // console.log('response of get-msgs', response.data.message);
 
       const newMessages: Message[] = Array.isArray(response.data.message)
         ? response.data.message
@@ -108,16 +107,11 @@ const UserDashboard = () => {
   //====== handle switch change ========//
   const handleSwitchChange = async () => {
     try {
-      console.log('before sending to backend to accept msg api');
-      // console.log(session?.user);
-
-      const response = await axios.post<ApiResponse>('/api/accept-messages',
-        {
-          acceptMessages: !acceptMessages
-        })
-      // setValue(acceptMessages, !acceptMessages)
-      setValue(acceptMessages, !acceptMessages)
-      // console.log('response from accept-message api',response.data);
+      // Toggle the current state
+      const response = await axios.post<ApiResponse>('/api/accept-messages', {
+        acceptMessages: !acceptMessages
+      });
+      setValue('acceptMessages', !acceptMessages)
       toast({
         title: response.data.message,
         variant: 'default'
@@ -133,10 +127,7 @@ const UserDashboard = () => {
     }
   };
 
-  // const { username } = session?.user as User //destructuring here is giving error
   const username = session?.user?.username;
-  // console.log('this is username destrcutred in dashboard file line no 123', username);
-
   // TODO: do more research
   // console.log(window.location);
   // const baseUrl = `${window.location.protocol}//${window.location.host}`;
@@ -158,9 +149,9 @@ const UserDashboard = () => {
     });
   };
 
-  if (!session || !session.user) {
-    return <div>Please login</div>
-  };
+  // if (!session || !session.user) {
+  //   return <div>Please login</div>
+  // };
 
 
   return (

@@ -4,13 +4,11 @@ import bcrypt from 'bcryptjs';
 import { sendVerificationEmail } from "@/helpers/sendVerificationEmail";
 
 export async function POST(request: Request) {
-    // console.log('Entering POST route handler');///////
     await dbConnect()
     // console.log('MongoDB connection established');//////
     try {
 
         const { username, email, password } = await request.json()
-        // console.log(username , password);
 
         const existingUserVerifiedByUsername = await UserModel.
             findOne({
@@ -53,15 +51,11 @@ export async function POST(request: Request) {
                 verifyCode,
                 verifyCodeExpiry: expiryDate,
                 isVerified: false,
-                // isAcceptingMessage: true,
                 isAcceptingMessage: false,
                 messages: []
             })
-            // console.log('before saving user to mongo line 64 in code');
             await newUSer.save()
-            // console.log('user just saved to mongo line 66 in code');
-
-        }
+        };
 
         // ** send verification email ** //
         const emailResponse = await sendVerificationEmail(
@@ -91,5 +85,5 @@ export async function POST(request: Request) {
                 status: 500
             }
         )
-    }
-}
+    };
+};

@@ -1,16 +1,3 @@
-// import React from 'react'
-
-// const page = () => {
-//   return (
-//     <div>
-//       message writing page
-//     </div>
-//   )
-// }
-
-// export default page
-
-
 
 'use client';
 
@@ -46,7 +33,7 @@ const parseStringMessages = (messageString: string): string[] => {
 };
 
 const initialMessageString =
-  "What's your favorite movie?||Do you have any pets?||What's your dream job?";
+  "What's your favorite movie?||Do you have any pets?||What's your dream job?|| What's your favourite way to spend a weekend?";
 
 
 export default function SendMessage() {
@@ -171,9 +158,11 @@ export default function SendMessage() {
           <Button
             onClick={fetchSuggestedMessages}
             className="my-4"
-            disabled={isSuggestLoading}
+            // disabled={isSuggestLoading}
+            disabled={true}
           >
-           Ask AI to Suggest Messages
+           {/* Ask AI to Suggest Messages */}
+           Choose from following messages
           </Button>
           <p>Click on any message below to select it.</p>
         </div>
