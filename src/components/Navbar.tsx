@@ -22,7 +22,6 @@ const Navbar = () => {
                     session ? (
                         <>
                             <span className='mr-4'>Welcome, {user?.username || user?.email}</span>
-                            {/* added dashboard anchor tag to take user back to his dashboard when he is loggedin but goes to home page */}
                             <a href='/dashboard' className='mr-4'> Your Dashboard </a>
                             <Button className='w-full md:w-auto' onClick= {() => signOut()}>
                                 LogOut

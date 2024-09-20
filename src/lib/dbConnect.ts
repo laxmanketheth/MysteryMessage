@@ -4,6 +4,7 @@ type ConnectionObject = {
     isConnected?: number
 }
 
+const MONGODB_URI = process.env.MONGODB_URI;
 const connection: ConnectionObject = {}
 
 async function dbConnect(): Promise<void> {
@@ -12,13 +13,11 @@ async function dbConnect(): Promise<void> {
         return
     }
     try {
-        const db = await mongoose.connect("mongodb+srv://laxmanketheth76:laxman123@cluster1.9ixhwqi.mongodb.net/mystry_message")
-        //   console.log(db);
-        // console.log(db.connections[0]);
-        // console.log('on dbconnect file at line 18 before db connection success');
+        const db = await mongoose.connect(MONGODB_URI as string)
+        // console.log('db data',db.connections[0]);
 
         connection.isConnected = db.connections[0].readyState
-        console.log("DB Connected successfully");
+        // console.log("DB Connected successfully");
 
     } catch (error) {
         console.log("Database Connection failed");

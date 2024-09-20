@@ -11,9 +11,6 @@ export async function GET(request: Request) {
 
     const session = await getServerSession(authOptions)
     const user: User = session?.user as User //typescript assertion
-    // console.log("session",session);
-    
-// console.log('this is user in get-messages api line 14',user);
 
     if (!session || !session.user) {
         return Response.json(

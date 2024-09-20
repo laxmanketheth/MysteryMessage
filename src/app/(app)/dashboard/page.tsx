@@ -149,9 +149,9 @@ const UserDashboard = () => {
     });
   };
 
-  // if (!session || !session.user) {
-  //   return <div>Please login</div>
-  // };
+  if (!session || !session.user) {
+    return <div className="text-center mt-10">Please login or head back to Home Page</div>
+  };
 
 
   return (

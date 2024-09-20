@@ -3,13 +3,10 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import Link from "next/link"
-import { useEffect, useState } from "react"
-import { useDebounceCallback } from 'usehooks-ts'
+import { useState } from "react"
 // import { useToast } from "@/components/ui/use-toast"
 import { useToast } from "@/hooks/use-toast"
 import { useRouter } from "next/navigation"
-// import { signUpSchema } from "@/schemas/signUpSchema"
-import axios, { AxiosError } from 'axios'
 import { ApiResponse } from "@/types/ApiResponse"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
@@ -21,9 +18,9 @@ import { signIn } from "next-auth/react"
 
 
 const page = () => {
-  const [isSubmitting, setisSubmitting] = useState(false)
-  const { toast } = useToast()
-  const router = useRouter()
+  const [isSubmitting, setisSubmitting] = useState(false);
+  const { toast } = useToast();
+  const router = useRouter();
 
   //zod implementation
   const form = useForm({
@@ -40,24 +37,34 @@ const page = () => {
       identifier: data.identifier,
       password: data.password,
     })
-    // console.log('login result line 43 in sign-in file', result);
 
     ///////////////////////
     setisSubmitting(true)
 
     if (result?.error) {
-      toast({
-        title: 'Login Failed',
-        description: "Incorrect Username or Password",
-        variant: 'destructive'
-      })
-    }
+      if (result.error === 'Error') {
+        console.log('again err',result.error);
+        
+        toast({
+          title: 'Login Failed',
+          description: "Incorrect Username or Password",
+          variant: 'destructive'
+        });
+      } else {
+        toast({
+          title: 'Error',
+          description: result.error,
+          variant: 'destructive',
+        });
+      }
+    };
+
     setisSubmitting(false)
 
     if (result?.url) {
       router.replace('/dashboard')
-    }
-  }
+    };
+  };
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
@@ -116,7 +123,7 @@ const page = () => {
 
         <div className="text-center mt-4">
           <p>
-             Not a member yet? {" "}
+            Not a member yet? {" "}
             <Link href='/sign-up' className='text-blue-600 hover:text-blue-800'>
               Sign up
             </Link>
@@ -125,6 +132,6 @@ const page = () => {
       </div>
     </div>
   )
-}
+};
 
-export default page
+export default page;

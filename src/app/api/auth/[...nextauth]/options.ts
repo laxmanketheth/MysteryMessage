@@ -3,8 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from 'bcryptjs';
 import dbConnect from "@/lib/dbConnect";
 import { UserModel } from "@/model/User";
-const NEXTAUTH_SECRET = process.env.NEXTAUTH_SECRET || ''
-
+const NEXTAUTH_SECRET = process.env.NEXTAUTH_SECRET
 
 export const authOptions: NextAuthOptions = {
     providers: [
@@ -22,7 +21,7 @@ export const authOptions: NextAuthOptions = {
                     const user = await UserModel.findOne({
                         //$or is mongoose operator, it will find user on the basis of any of the following properties given below
                         $or: [
-                            { email: credentials.identifier.email },
+                            { email: credentials.identifier },
                             { username: credentials.identifier }
                         ]
                     })
@@ -72,8 +71,5 @@ export const authOptions: NextAuthOptions = {
     session: {
         strategy: 'jwt'
     },
-    // secret: NEXTAUTH_SECRET
-    // secret: "helloThere123"
-    // secret: process.env.NEXTAUTH_SECRET,
-    secret: "b3acc15a1ca1c810a438f53de73ae6dad0c58f203864668d809afca024d728ce"
+    secret:NEXTAUTH_SECRET
 }
