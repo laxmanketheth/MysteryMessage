@@ -17,7 +17,7 @@ import { signIn } from "next-auth/react"
 
 
 
-const Page = () => {
+const SignInPage = () => {
   const [isSubmitting, setisSubmitting] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
@@ -134,4 +134,4 @@ const Page = () => {
   )
 };
 
-export default Page;
+export default SignInPage;
