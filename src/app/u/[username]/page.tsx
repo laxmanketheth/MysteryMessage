@@ -36,7 +36,7 @@ const initialMessageString =
   "What's your favorite movie?||Do you have any pets?||What's your dream job?|| What's your favourite way to spend a weekend?";
 
 
-export default function endMessage() {
+export default function SendMessage() {
   const params = useParams<{ username: string }>();
   const username = params.username;
   const { toast } = useToast();
