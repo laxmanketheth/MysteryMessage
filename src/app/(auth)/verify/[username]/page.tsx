@@ -83,7 +83,7 @@ const VerifyAccount = () => {
             </div>
 
         </div>
-    )
-}
+    );
+};
 
-export default VerifyAccount
+export default VerifyAccount;

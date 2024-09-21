@@ -78,4 +78,4 @@ const MessageCard = ({ message, onMessageDelete }: MessageCardProps) => {
     )
 };
 
-export default MessageCard
+export default MessageCard;
