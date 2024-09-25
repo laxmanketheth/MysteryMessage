@@ -62,10 +62,7 @@ const SignInPage = () => {
     setisSubmitting(false)
 
     if (result?.url) {
-      console.log('hellooo');
       router.replace('/dashboard')
-      console.log('noooooo');
-      
     }
   };
 
