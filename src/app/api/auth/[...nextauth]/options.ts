@@ -3,7 +3,9 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from 'bcryptjs';
 import dbConnect from "@/lib/dbConnect";
 import { UserModel } from "@/model/User";
-const NEXTAUTH_SECRET = process.env.NEXTAUTH_SECRET
+const NEXTAUTH_SECRET = process.env.NEXTAUTH_SECRET;
+const NEXTAUTH_URL = process.env.NEXTAUTH_URL || "http://localhost:3000"; // Default to local URL
+
 
 export const authOptions: NextAuthOptions = {
     providers: [
@@ -15,16 +17,16 @@ export const authOptions: NextAuthOptions = {
                 password: { label: "Password", type: "password" }
             },
             async authorize(credentials: any): Promise<any> {
-                await dbConnect()
+                await dbConnect();
                 try {
-
                     const user = await UserModel.findOne({
                         //$or is mongoose operator, it will find user on the basis of any of the following properties given below
                         $or: [
                             { email: credentials.identifier },
                             { username: credentials.identifier }
                         ]
-                    })
+                    });
+
                     if (!user) {
                         throw new Error('No user found with this email')
                     }
@@ -32,9 +34,12 @@ export const authOptions: NextAuthOptions = {
                         throw new Error('Please verify your account before login')
                     }
 
-                    const isPasswordCorrect = await bcrypt.compare(credentials.password, user.password)
+                    const isPasswordCorrect = await bcrypt.compare(
+                        credentials.password,
+                        user.password
+                    );
                     if (isPasswordCorrect) {
-                        return user
+                        return user;
                     } else {
                         throw new Error('Incorrect Password')
                     }
@@ -48,28 +53,28 @@ export const authOptions: NextAuthOptions = {
     callbacks: {
         async jwt({ token, user }) {
             if (user) {
-                token._id = user._id?.toString()
-                token.isVerified = user.isVerified
-                token.isAcceptingMessages = user.isAcceptingMessages
-                token.username = user.username
+                token._id = user._id?.toString();
+                token.isVerified = user.isVerified;
+                token.isAcceptingMessages = user.isAcceptingMessages;
+                token.username = user.username;
             }
             return token
         },
         async session({ session, token }) {
             if (token) {
-                session.user._id = token._id
-                session.user.isVerified = token.isVerified
-                session.user.isAcceptingMessages = token.isAcceptingMessages
-                session.user.username = token.username
+                session.user._id = token._id;
+                session.user.isVerified = token.isVerified;
+                session.user.isAcceptingMessages = token.isAcceptingMessages;
+                session.user.username = token.username;
             }
-            return session
+            return session;
         }
-    },
-    pages: {
-        signIn: '/sign-in'
     },
     session: {
         strategy: 'jwt'
     },
-    secret:NEXTAUTH_SECRET
-}
+    secret: process.env.NEXTAUTH_SECRET,
+    pages: {
+        signIn: '/sign-in'
+    },
+};

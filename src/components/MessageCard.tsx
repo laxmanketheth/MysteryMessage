@@ -26,6 +26,8 @@ import { useToast } from "@/hooks/use-toast"
 import axios from "axios"
 import { ApiResponse } from "@/types/ApiResponse"
 import dayjs from 'dayjs'
+import dynamic from "next/dynamic";
+
 
 type MessageCardProps = {
     message: Message;
@@ -79,3 +81,5 @@ const MessageCard = ({ message, onMessageDelete }: MessageCardProps) => {
 };
 
 export default MessageCard;
+// export default dynamic (() => Promise.resolve(MessageCard), {ssr: false})
+

@@ -15,7 +15,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
-
+import dynamic from "next/dynamic";
 
 
 const SignUpPage = () => {
@@ -185,3 +185,4 @@ const SignUpPage = () => {
 };
 
 export default SignUpPage;
+// export default dynamic (() => Promise.resolve(SignUpPage), {ssr: false})

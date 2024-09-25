@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
 import { signInSchema } from "@/schemas/signInSchema"
 import { signIn } from "next-auth/react"
-
+import dynamic from "next/dynamic";
 
 
 const SignInPage = () => {
@@ -29,7 +29,7 @@ const SignInPage = () => {
       identifier: '',
       password: ''
     }
-  })
+  });
 
   const onSubmit = async (data: z.infer<typeof signInSchema>) => {
     const result = await signIn('credentials', {
@@ -40,11 +40,12 @@ const SignInPage = () => {
 
     ///////////////////////
     setisSubmitting(true)
+    // console.log('this is result from sign in line 43', result);
 
     if (result?.error) {
       if (result.error === 'Error') {
-        console.log('again err',result.error);
-        
+        console.log('again err', result.error);
+
         toast({
           title: 'Login Failed',
           description: "Incorrect Username or Password",
@@ -62,8 +63,11 @@ const SignInPage = () => {
     setisSubmitting(false)
 
     if (result?.url) {
+      console.log('hellooo');
       router.replace('/dashboard')
-    };
+      console.log('noooooo');
+      
+    }
   };
 
   return (
@@ -135,3 +139,4 @@ const SignInPage = () => {
 };
 
 export default SignInPage;
+// export default dynamic (() => Promise.resolve(SignInPage), {ssr: false})

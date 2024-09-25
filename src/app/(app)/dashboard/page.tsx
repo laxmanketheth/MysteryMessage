@@ -15,11 +15,16 @@ import { User } from "next-auth";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useState } from "react"
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation"
-
+import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
+setTimeout(() => {
+  console.log('this is inside dashboard file line 24');
+},2000)
 
 const UserDashboard = () => {
-
+  setTimeout(() => {
+    console.log('this is inside dashboard file line 24');
+  },2000)
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSwitchLoading, setIsSwitchLoading] = useState(false);
@@ -30,8 +35,15 @@ const UserDashboard = () => {
     setMessages(messages.filter((message) => message._id !== messageId))
   };
 
+  setTimeout(() => {
+    console.log('this is inside dashboard file after routing');
+  },2000)
 
-  const { data: session } = useSession()
+  
+
+  const { data: session } = useSession();
+  console.log('session in dashboard line 36',session);
+  
   const form = useForm({
     resolver: zodResolver(AcceptMessageSchema)
   });
@@ -128,6 +140,8 @@ const UserDashboard = () => {
   };
 
   const username = session?.user?.username;
+  // const { username } = session?.user as User;
+  
   // TODO: do more research
   // console.log(window.location);
   // const baseUrl = `${window.location.protocol}//${window.location.host}`;
@@ -136,6 +150,9 @@ const UserDashboard = () => {
     // This will run only on the client
     const url = `${window.location.protocol}//${window.location.host}`;
     setBaseUrl(url);
+    setTimeout(() => {
+      console.log('this is inside dashboard file line 24');
+    },2000)
   }, []);
 
   const profileUrl = `${baseUrl}/u/${username}`;
@@ -150,6 +167,7 @@ const UserDashboard = () => {
   };
 
   if (!session || !session.user) {
+    // console.log(session.user);
     return <div className="text-center mt-10">Please login or head back to Home Page</div>
   };
 
@@ -218,3 +236,5 @@ const UserDashboard = () => {
 }
 
 export default UserDashboard;
+// export default dynamic (() => Promise.resolve(UserDashboard), {ssr: false})
+
