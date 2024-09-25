@@ -26,7 +26,7 @@ import { useToast } from "@/hooks/use-toast"
 import axios from "axios"
 import { ApiResponse } from "@/types/ApiResponse"
 import dayjs from 'dayjs'
-import dynamic from "next/dynamic";
+// import dynamic from "next/dynamic";
 
 
 type MessageCardProps = {

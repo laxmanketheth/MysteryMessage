@@ -6,7 +6,7 @@ import { useSession, signOut } from 'next-auth/react'
 import { User } from 'next-auth'
 import { Button } from './ui/button'
 import { useRouter } from "next/navigation"
-import dynamic from "next/dynamic";
+// import dynamic from "next/dynamic";
 
 
 const Navbar = () => {
@@ -14,8 +14,6 @@ const Navbar = () => {
     const router = useRouter();
     const { data: session } = useSession();
     const user: User = session?.user as User;
-    // console.log('user in navbar',user);
-    
 
     return (
         <nav className='p-4 md:p-6 shadow-md'>

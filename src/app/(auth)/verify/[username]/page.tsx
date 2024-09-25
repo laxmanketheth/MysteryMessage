@@ -11,7 +11,7 @@ import { useParams, useRouter } from 'next/navigation'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from "zod"
-import dynamic from "next/dynamic";
+// import dynamic from "next/dynamic";
 
 const VerifyAccount = () => {
     const router = useRouter()
@@ -34,7 +34,6 @@ const VerifyAccount = () => {
                 description: response.data.message
             })
             router.replace('/sign-in')
-            // router.push('sign-in')
 
         } catch (error) {
             console.error("Error in signup of user", error);

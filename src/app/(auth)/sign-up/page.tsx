@@ -15,7 +15,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
-import dynamic from "next/dynamic";
+// import dynamic from "next/dynamic";
 
 
 const SignUpPage = () => {
@@ -46,12 +46,9 @@ const SignUpPage = () => {
         setIsCheckingUsername(true)
         setUsernameMessage('')
         try {
-          // console.log('before api call');
           const response = await axios.get(`/api/check-username-unique?username=${username}`)
-          // console.log('API response',response.data.message);
-          // console.log('hello');
-  
           setUsernameMessage(response.data.message)
+          
         } catch (error) {
           const axiosError = error as AxiosError<ApiResponse>;
           setUsernameMessage(axiosError.response?.data.message ?? "Error Checking Username")

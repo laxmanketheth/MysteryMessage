@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
 import { signInSchema } from "@/schemas/signInSchema"
 import { signIn } from "next-auth/react"
-import dynamic from "next/dynamic";
+// import dynamic from "next/dynamic";
 
 
 const SignInPage = () => {
@@ -40,7 +40,6 @@ const SignInPage = () => {
 
     ///////////////////////
     setisSubmitting(true)
-    // console.log('this is result from sign in line 43', result);
 
     if (result?.error) {
       if (result.error === 'Error') {

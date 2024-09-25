@@ -25,8 +25,7 @@ import { ApiResponse } from '@/types/ApiResponse';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { messageSchema } from '@/schemas/messageSchema';
-import dynamic from "next/dynamic";
-
+// import dynamic from "next/dynamic";
 
 const specialChar = '||';
 
@@ -140,11 +139,11 @@ const SendMessage = () => {
                 Please wait
               </Button>
             )
-              // : messageSent ? (
-              //   <Button disabled>
-              //     Message sent
-              //   </Button>
-              // )
+              : messageSent ? (
+                <Button disabled>
+                  Message sent
+                </Button>
+              )
                 : (
                   <Button type="submit" disabled={isLoading || !messageContent || messageSent}>
                     Send It

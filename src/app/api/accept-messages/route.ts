@@ -22,7 +22,6 @@ export async function POST(request: Request) {
 
     const userId = user._id;
     const { acceptMessages } = await request.json()
-    // console.log('response is coming to accpet msg api backend in accept-messsage file line 25 and this is req.body', !acceptMessages);
 
     try {
         const updatedUser = await UserModel.findByIdAndUpdate(
@@ -30,7 +29,6 @@ export async function POST(request: Request) {
             { isAcceptingMessage: acceptMessages },
             { new: true } //returns the updated value
         )
-        // console.log('updated user at acceptmsg api', updatedUser);
 
         if (!updatedUser) {
             return Response.json(
@@ -41,7 +39,6 @@ export async function POST(request: Request) {
                 { status: 404 }
             )
         };
-        // console.log('Updated user at accept msg API:', updatedUser);
 
         //======== Successfully updated message acceptance status ========//
         return Response.json(
