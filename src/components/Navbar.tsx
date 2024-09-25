@@ -32,7 +32,7 @@ const Navbar = () => {
                         </>
                     ) : (
                         <Link href='/sign-in'>
-                            <Button className='w-full md:w-auto'>Login / Logout</Button>
+                            <Button className='w-full md:w-auto'>SignIn / SignUp</Button>
                         </Link>
                     )
                 }
