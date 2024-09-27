@@ -64,8 +64,11 @@ const SignUpPage = () => {
 
     setisSubmitting(true)
     try {
+      console.log('data in signup line 67',data);
+      
       const response = await axios.post<ApiResponse>('/api/sign-up', data)
       // console.log('response from signup api',response.data);
+      console.log('response in line 71 in signup frontend',response);
       
       toast({
         title: 'Success',

@@ -10,12 +10,15 @@ export async function sendVerificationEmail(
 
     //setting up Resend to send the opt email to user//
     try {
-        await resend.emails.send({
+        // console.log('this is email inside sendVerificationEmail file line 13',email);
+        
+      const response =  await resend.emails.send({
             from: 'mysterymsg@resend.dev',
             to: email,
             subject: 'Mystery message | verification code',
             react: VerificationEmail({ username, otp: verifyCode }),
         });
+        console.log('this is response inside sendVerificationEmail file line 21',response);
         return { success: true, message: 'Verification email sent successfully' }
 
     } catch (emailError) {

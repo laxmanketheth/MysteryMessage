@@ -4,17 +4,20 @@ import bcrypt from 'bcryptjs';
 import { sendVerificationEmail } from "@/helpers/sendVerificationEmail";
 
 export async function POST(request: Request) {
-    await dbConnect()
+    await dbConnect();
     // console.log('MongoDB connection established');//////
     try {
 
         const { username, email, password } = await request.json()
-
+        // console.log('signup route line 12',username, email, password);
+        
         const existingUserVerifiedByUsername = await UserModel.
             findOne({
                 username,
                 isVerified: true
-            })
+            });
+            // console.log('user exists by email on line 19 in signup route',existingUserVerifiedByUsername);
+            
 
         if (existingUserVerifiedByUsername) {
             return Response.json({
@@ -23,7 +26,7 @@ export async function POST(request: Request) {
             }, { status: 400 })
         }
         const existingUserByEmail = await UserModel.findOne({ email })
-        const verifyCode = Math.floor(100000 + Math.random() * 900000).toString()
+        const verifyCode = Math.floor(100000 + Math.random() * 900000).toString() //generating verification code
         if (existingUserByEmail) {
             if (existingUserByEmail.isVerified) {
                 return Response.json({
@@ -63,6 +66,8 @@ export async function POST(request: Request) {
             username,
             verifyCode
         )
+        // console.log('email response in line 69 backend route',emailResponse);
+        
         if (!emailResponse.success) {
             return Response.json({
                 success: false,
