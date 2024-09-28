@@ -5,7 +5,6 @@ import * as z from "zod"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { useDebounceCallback } from 'usehooks-ts'
-// import { useToast } from "@/components/ui/use-toast"
 import { useToast } from "@/hooks/use-toast"
 import { useRouter } from "next/navigation"
 import { signUpSchema } from "@/schemas/signUpSchema"
@@ -67,7 +66,6 @@ const SignUpPage = () => {
       console.log('data in signup line 67',data);
       
       const response = await axios.post<ApiResponse>('/api/sign-up', data)
-      // console.log('response from signup api',response.data);
       console.log('response in line 71 in signup frontend',response);
       
       toast({

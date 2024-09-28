@@ -9,15 +9,11 @@ export async function POST(request: Request) {
     try {
 
         const { username, email, password } = await request.json()
-        // console.log('signup route line 12',username, email, password);
-        
         const existingUserVerifiedByUsername = await UserModel.
             findOne({
                 username,
                 isVerified: true
             });
-            // console.log('user exists by email on line 19 in signup route',existingUserVerifiedByUsername);
-            
 
         if (existingUserVerifiedByUsername) {
             return Response.json({
@@ -66,14 +62,13 @@ export async function POST(request: Request) {
             username,
             verifyCode
         )
-        // console.log('email response in line 69 backend route',emailResponse);
         
         if (!emailResponse.success) {
             return Response.json({
                 success: false,
                 message: emailResponse.message
             }, { status: 500 })
-        }
+        };
         return Response.json({
             success: true,
             message: "User registered successfully. Please verify your email"
