@@ -11,11 +11,9 @@ import { ApiResponse } from "@/types/ApiResponse";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosError } from "axios";
 import { Loader2, RefreshCcw } from "lucide-react";
-import { User } from "next-auth";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useState } from "react"
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
 // import dynamic from "next/dynamic";
 
 const UserDashboard = () => {
@@ -24,7 +22,6 @@ const UserDashboard = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSwitchLoading, setIsSwitchLoading] = useState(false);
   const [baseUrl, setBaseUrl] = useState('');
-  const router = useRouter();
   const { toast } = useToast();
   const handleDeleteMessage = (messageId: string) => {
     setMessages(messages.filter((message) => message._id !== messageId))
@@ -64,23 +61,18 @@ const UserDashboard = () => {
     setIsSwitchLoading(false)
     try {
       const response = await axios.get<ApiResponse>('/api/get-messages')
-      // console.log('response of get-msgs',response.data);
-      // console.log('response of get-msgs', response.data.message);
-
       const newMessages: Message[] = Array.isArray(response.data.message)
         ? response.data.message
         : []; // Default to an empty array if it's not an array
 
       setMessages(newMessages);
 
-      // setMessages(response.data.message || [])
-
       if (refresh) {
         toast({
           title: 'Refreshed Messages',
           description: "Showing latest messages"
         })
-      }
+      };
     } catch (error) {
       const axiosError = error as AxiosError<ApiResponse>;
       toast({
@@ -129,11 +121,6 @@ const UserDashboard = () => {
   };
 
   const username = session?.user?.username;
-  // const { username } = session?.user as User;
-  
-  // TODO: do more research
-  // console.log(window.location);
-  // const baseUrl = `${window.location.protocol}//${window.location.host}`;
 
   useEffect(() => {
     // This will run only on the client

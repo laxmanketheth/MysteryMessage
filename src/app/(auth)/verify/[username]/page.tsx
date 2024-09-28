@@ -10,7 +10,6 @@ import axios, { AxiosError } from 'axios'
 import { useParams, useRouter } from 'next/navigation'
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import * as z from "zod"
 // import dynamic from "next/dynamic";
 
 const VerifyAccount = () => {
